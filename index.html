@@ -1,0 +1,805 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bountly | Verified US Gift Card &amp; Reward Claims</title>
+<meta name="description" content="Bountly posts verified US gift card drops and consumer reward claims daily. Browse the board, check a listing, claim it.">
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="Bountly | Verified US Gift Card &amp; Reward Claims">
+<meta property="og:description" content="A daily-updated board of verified US gift card drops and reward claims.">
+<meta property="og:image" content="https://images.unsplash.com/photo-1586953208448-b95a79798f07?w=1200&q=80">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Bountly">
+<meta name="twitter:description" content="A daily-updated board of verified US gift card drops and reward claims.">
+
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22><circle cx=%2212%22 cy=%2212%22 r=%2211%22 fill=%22%231F5C52%22/><text x=%2212%22 y=%2216.5%22 font-family=%22Georgia%22 font-size=%2213%22 fill=%22%23EFE7D6%22 text-anchor=%22middle%22 font-weight=%22bold%22>B</text></svg>">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;700;800&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = { theme: { extend: { colors: {
+    paper: { 50:'#FBF8F1', 100:'#F3EDDD', 200:'#EFE7D6', 300:'#E4D8BE' },
+    ink: { 900:'#1C1B17', 700:'#3A382F', 500:'#635F52' },
+    stamp: { 500:'#C24A2E', 600:'#A83C24' },
+    teal: { 600:'#1F5C52', 700:'#164A3E' },
+    gold: { 500:'#C99A2E' }
+  }, fontFamily: {
+    display: ['"Big Shoulders Display"', 'sans-serif'],
+    body: ['"IBM Plex Sans"', 'sans-serif'],
+    mono: ['"IBM Plex Mono"', 'monospace']
+  }}}}
+</script>
+<style>
+  html { scroll-behavior: smooth; }
+  body { font-family: 'IBM Plex Sans', sans-serif; background-color: #F3EDDD; color: #1C1B17; }
+  .font-display { font-family: 'Big Shoulders Display', sans-serif; letter-spacing: 0.01em; }
+  .font-mono { font-family: 'IBM Plex Mono', monospace; }
+
+  ::selection { background: #C24A2E; color: #FBF8F1; }
+
+  .clamp-2 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  .clamp-3 { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+
+  /* Paper grain */
+  .paper-grain { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E"); }
+
+  /* Hero cross-hatch */
+  .board-bg {
+    background-color: #EFE7D6;
+    background-image:
+      radial-gradient(circle at 1px 1px, rgba(28,27,23,0.08) 1px, transparent 0);
+    background-size: 18px 18px;
+  }
+
+  /* Rotated stamp mark */
+  @keyframes stamp-in { 0% { transform: rotate(-14deg) scale(2.4); opacity: 0; } 60% { opacity: 1; } 100% { transform: rotate(-9deg) scale(1); opacity: 1; } }
+  .stamp-mark { animation: stamp-in .7s cubic-bezier(.2,.8,.2,1) both; animation-delay: .25s; }
+
+  @keyframes drift { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+  .drift { animation: drift 6s ease-in-out infinite; }
+
+  /* Header */
+  #site-header { transition: background-color .3s ease, border-color .3s ease, box-shadow .3s ease; }
+  #site-header.scrolled { background-color: rgba(251,248,241,0.92); box-shadow: 0 6px 20px -10px rgba(28,27,23,0.25); border-bottom-color: rgba(28,27,23,0.14); }
+
+  #mobile-menu { transition: max-height .35s ease, opacity .3s ease; max-height: 0; opacity: 0; overflow: hidden; }
+  #mobile-menu.open { max-height: 420px; opacity: 1; }
+
+  .btn-stamp { transition: transform .2s ease, box-shadow .2s ease; }
+  .btn-stamp:hover { transform: translateY(-2px) rotate(-0.6deg); box-shadow: 4px 6px 0 0 #1C1B17; }
+  .btn-stamp:active { transform: translateY(0) rotate(0deg); box-shadow: 2px 2px 0 0 #1C1B17; }
+
+  /* ---- Ticket stub card (signature element) ---- */
+  .ticket {
+    opacity: 0; transform: translateY(24px);
+    transition: opacity .55s ease, transform .55s ease, box-shadow .3s ease, transform .3s ease;
+    position: relative;
+    background: #FBF8F1;
+    border: 1.5px solid rgba(28,27,23,0.16);
+  }
+  .ticket.in-view { opacity: 1; transform: translateY(0); }
+  .ticket:hover { box-shadow: 6px 8px 0 0 rgba(28,27,23,0.14); transform: translateY(-4px); }
+
+  /* perforation row between image/body and the claim stub */
+  .perforation {
+    position: relative;
+    height: 0;
+    border-top: 2px dashed rgba(28,27,23,0.28);
+  }
+  .perforation::before, .perforation::after {
+    content: '';
+    position: absolute; top: 50%; transform: translateY(-50%);
+    width: 18px; height: 18px; border-radius: 9999px;
+    background: #F3EDDD;
+    border: 1.5px solid rgba(28,27,23,0.16);
+  }
+  .perforation::before { left: -10px; }
+  .perforation::after { right: -10px; }
+
+  .skeleton { position: relative; overflow: hidden; background-color: rgba(28,27,23,0.06); }
+  .skeleton::after { content: ''; position: absolute; inset: 0; transform: translateX(-100%); background: linear-gradient(90deg, transparent, rgba(28,27,23,0.09), transparent); animation: shimmer 1.6s infinite; }
+  @keyframes shimmer { 100% { transform: translateX(100%); } }
+
+  .desc-trigger { cursor: pointer; }
+  .desc-trigger:hover .see-more-tag { text-decoration-color: #C24A2E; }
+  .desc-trigger:focus-visible { outline: 2px solid #1F5C52; outline-offset: 3px; border-radius: 4px; }
+  .see-more-tag { text-decoration: underline; text-decoration-color: transparent; text-underline-offset: 3px; transition: text-decoration-color .2s ease; }
+
+  /* Generic modal (offer detail + info pages) */
+  .app-modal { display: none; }
+  .app-modal.open { display: block; }
+  .modal-backdrop-el { opacity: 0; transition: opacity .3s ease; }
+  .app-modal.open .modal-backdrop-el { opacity: 1; }
+  .modal-panel-el { opacity: 0; transform: translateY(20px) scale(0.98); transition: opacity .3s ease, transform .3s ease; }
+  .app-modal.open .modal-panel-el { opacity: 1; transform: translateY(0) scale(1); }
+  body.modal-locked { overflow: hidden; }
+
+  #modal-body p, .prose-body p { margin: 0; }
+  #modal-body p + p, .prose-body p + p { margin-top: 1.05rem; }
+  .prose-body h4 { font-weight: 700; margin-top: 1.4rem; margin-bottom: .4rem; color: #1C1B17; }
+  .prose-body ul { margin-top: .5rem; padding-left: 1.1rem; list-style: disc; }
+  .prose-body li + li { margin-top: .35rem; }
+
+  a.gmail-link { text-decoration: underline; text-decoration-style: dashed; text-underline-offset: 3px; color: #1F5C52; }
+  a.gmail-link:visited { color: #6b4fa0; }
+  a.gmail-link:hover { color: #C24A2E; }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    .stamp-mark, .drift, .skeleton::after { animation: none; }
+    .ticket { transition: none; opacity: 1; transform: none; }
+    .modal-backdrop-el, .modal-panel-el { transition: none; }
+  }
+
+  a:focus-visible, button:focus-visible { outline: 2px solid #1F5C52; outline-offset: 3px; border-radius: 4px; }
+</style>
+</head>
+
+<body class="bg-paper-100 text-ink-900 antialiased">
+
+<!-- ============ HEADER ============ -->
+<header id="site-header" class="fixed top-0 inset-x-0 z-50 border-b border-transparent">
+  <div class="max-w-7xl mx-auto px-5 sm:px-8 h-16 md:h-[76px] flex items-center justify-between">
+
+    <a href="#top" class="flex items-center gap-2.5 shrink-0" aria-label="Home">
+      <span class="w-10 h-10 rounded-full bg-teal-600 flex items-center justify-center border-2 border-ink-900 shrink-0">
+        <span class="font-display font-bold text-paper-50 text-xl leading-none -mt-0.5">B</span>
+      </span>
+      <span class="font-display font-bold text-2xl tracking-tight text-ink-900">BOUNTLY</span>
+    </a>
+
+    <nav class="hidden md:flex items-center gap-8 text-sm font-semibold text-ink-700 font-mono uppercase tracking-wide">
+      <a href="#board" class="hover:text-stamp-500 transition-colors">The Board</a>
+      <a href="#how" class="hover:text-stamp-500 transition-colors">How It Works</a>
+      <a href="#trust" class="hover:text-stamp-500 transition-colors">Verification</a>
+      <a href="#faq" class="hover:text-stamp-500 transition-colors">FAQ</a>
+    </nav>
+
+    <div class="hidden md:block">
+      <a href="#board" class="btn-stamp inline-flex items-center gap-2 bg-ink-900 text-paper-50 text-sm font-bold font-mono uppercase px-5 py-2.5 rounded-sm">
+        View Listings →
+      </a>
+    </div>
+
+    <button id="menu-toggle" class="md:hidden w-10 h-10 flex items-center justify-center rounded-sm border-2 border-ink-900 text-ink-900" aria-label="Toggle menu" aria-expanded="false">
+      <svg id="icon-open" width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      <svg id="icon-close" width="20" height="20" viewBox="0 0 24 24" fill="none" class="hidden"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+    </button>
+  </div>
+
+  <div id="mobile-menu" class="md:hidden border-b-2 border-ink-900 bg-paper-50/98">
+    <div class="px-5 py-4 flex flex-col gap-1 text-sm font-semibold font-mono uppercase text-ink-700">
+      <a href="#board" class="py-2.5 border-b border-ink-900/15">The Board</a>
+      <a href="#how" class="py-2.5 border-b border-ink-900/15">How It Works</a>
+      <a href="#trust" class="py-2.5 border-b border-ink-900/15">Verification</a>
+      <a href="#faq" class="py-2.5">FAQ</a>
+      <a href="#board" class="btn-stamp mt-3 inline-flex items-center justify-center gap-2 bg-ink-900 text-paper-50 text-sm font-bold px-5 py-3 rounded-sm min-h-[44px]">View Listings →</a>
+    </div>
+  </div>
+</header>
+
+<!-- ============ HERO ============ -->
+<section id="top" class="relative pt-28 pb-16 md:pt-40 md:pb-24 board-bg overflow-hidden">
+  <div class="paper-grain absolute inset-0 pointer-events-none mix-blend-multiply"></div>
+
+  <div class="relative max-w-5xl mx-auto px-5 sm:px-8">
+    <div class="flex flex-col md:flex-row md:items-start gap-8 md:gap-4">
+      <div class="flex-1">
+        <span class="inline-flex items-center gap-2 font-mono text-xs font-semibold uppercase tracking-wider text-ink-700 border border-ink-900/25 bg-paper-50/70 rounded-sm px-3 py-1.5">
+          <span class="w-1.5 h-1.5 rounded-full bg-teal-600"></span>
+          Board updated today
+        </span>
+
+        <h1 class="font-display font-extrabold text-ink-900 text-[2.75rem] leading-[0.95] sm:text-6xl md:text-7xl tracking-tight mt-5">
+          POSTED DAILY.<br>
+          <span class="text-stamp-500">CLAIMED</span> BY YOU.
+        </h1>
+
+        <p class="text-ink-700 text-base sm:text-lg mt-6 max-w-xl leading-relaxed">
+          Bountly is a running board of verified US gift card drops and consumer reward claims. No confusing sign-up mazes, no mystery links — every posting is checked before it goes up.
+        </p>
+
+        <div class="flex flex-col sm:flex-row items-start gap-3 mt-8">
+          <a href="#board" class="btn-stamp w-full sm:w-auto min-h-[44px] inline-flex items-center justify-center gap-2 bg-stamp-500 text-paper-50 font-bold font-mono uppercase text-sm px-7 py-3.5 rounded-sm border-2 border-ink-900">
+            Open the Board
+          </a>
+          <a href="#how" class="w-full sm:w-auto min-h-[44px] inline-flex items-center justify-center gap-2 bg-transparent border-2 border-ink-900 text-ink-900 font-bold font-mono uppercase text-sm px-7 py-3.5 rounded-sm hover:bg-ink-900 hover:text-paper-50 transition-colors">
+            How Claiming Works
+          </a>
+        </div>
+      </div>
+
+      <div class="hidden md:flex w-40 shrink-0 items-start justify-center pt-4">
+        <div class="stamp-mark drift w-32 h-32 rounded-full border-[3px] border-stamp-500 flex items-center justify-center text-center -rotate-[9deg]">
+          <span class="font-display font-bold text-stamp-500 text-sm leading-tight uppercase">Verified<br>Reward<br>Board</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Trust strip -->
+    <div class="flex flex-wrap items-center gap-2.5 mt-12 pt-6 border-t border-ink-900/15">
+      <span class="inline-flex items-center gap-1.5 font-mono text-xs font-medium text-ink-700 bg-paper-50/80 border border-ink-900/20 rounded-sm px-3 py-1.5">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M12 3l7 3v6c0 4.5-3 8-7 9-4-1-7-4.5-7-9V6l7-3z" stroke="#1F5C52" stroke-width="1.8"/></svg>
+        Encrypted connection
+      </span>
+      <span class="inline-flex items-center gap-1.5 font-mono text-xs font-medium text-ink-700 bg-paper-50/80 border border-ink-900/20 rounded-sm px-3 py-1.5">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M7 12l3.2 3.2L17 8.4" stroke="#1F5C52" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Checked before posting
+      </span>
+      <span class="inline-flex items-center gap-1.5 font-mono text-xs font-medium text-ink-700 bg-paper-50/80 border border-ink-900/20 rounded-sm px-3 py-1.5">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M3 12h18M12 3v18" stroke="#1F5C52" stroke-width="1.8" stroke-linecap="round"/></svg>
+        US-based only
+      </span>
+    </div>
+  </div>
+</section>
+
+<!-- ============ HOW IT WORKS ============ -->
+<section id="how" class="border-y-2 border-ink-900 bg-paper-50">
+  <div class="max-w-6xl mx-auto px-5 sm:px-8 py-14 md:py-16">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-10">
+      <div class="flex gap-4">
+        <span class="font-display font-extrabold text-stamp-500 text-4xl leading-none shrink-0">1</span>
+        <div>
+          <p class="font-display font-bold text-ink-900 text-lg uppercase tracking-tight">Read the posting</p>
+          <p class="text-ink-700 text-sm mt-1.5 leading-relaxed">Open any card on the board for the full write-up — who's behind it, what's required, and what you get.</p>
+        </div>
+      </div>
+      <div class="flex gap-4">
+        <span class="font-display font-extrabold text-stamp-500 text-4xl leading-none shrink-0">2</span>
+        <div>
+          <p class="font-display font-bold text-ink-900 text-lg uppercase tracking-tight">Confirm eligibility</p>
+          <p class="text-ink-700 text-sm mt-1.5 leading-relaxed">Each listing states its own requirements — location, age, or steps to complete — right on the card.</p>
+        </div>
+      </div>
+      <div class="flex gap-4">
+        <span class="font-display font-extrabold text-stamp-500 text-4xl leading-none shrink-0">3</span>
+        <div>
+          <p class="font-display font-bold text-ink-900 text-lg uppercase tracking-tight">Claim it</p>
+          <p class="text-ink-700 text-sm mt-1.5 leading-relaxed">Follow the listing to the source and complete it there. Bountly just keeps the board current.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ TRUST ============ -->
+<section id="trust" class="bg-paper-100">
+  <div class="max-w-6xl mx-auto px-5 sm:px-8 py-10 grid grid-cols-2 md:grid-cols-4 gap-6">
+    <div class="flex items-center gap-3">
+      <span class="w-9 h-9 shrink-0 rounded-sm border-2 border-ink-900 flex items-center justify-center bg-paper-50">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 2v20M4 8l8-6 8 6M4 8v10a2 2 0 002 2h12a2 2 0 002-2V8" stroke="#1F5C52" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </span>
+      <p class="text-sm font-semibold text-ink-800">Always free to browse</p>
+    </div>
+    <div class="flex items-center gap-3">
+      <span class="w-9 h-9 shrink-0 rounded-sm border-2 border-ink-900 flex items-center justify-center bg-paper-50">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 8v4l3 3" stroke="#1F5C52" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="9" stroke="#1F5C52" stroke-width="1.7"/></svg>
+      </span>
+      <p class="text-sm font-semibold text-ink-800">Reviewed each morning</p>
+    </div>
+    <div class="flex items-center gap-3">
+      <span class="w-9 h-9 shrink-0 rounded-sm border-2 border-ink-900 flex items-center justify-center bg-paper-50">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M3 12h18M12 3v18" stroke="#1F5C52" stroke-width="1.7" stroke-linecap="round"/></svg>
+      </span>
+      <p class="text-sm font-semibold text-ink-800">Open to US residents</p>
+    </div>
+    <div class="flex items-center gap-3">
+      <span class="w-9 h-9 shrink-0 rounded-sm border-2 border-ink-900 flex items-center justify-center bg-paper-50">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><rect x="4" y="10" width="16" height="10" rx="2" stroke="#1F5C52" stroke-width="1.7"/><path d="M8 10V7a4 4 0 018 0v3" stroke="#1F5C52" stroke-width="1.7"/></svg>
+      </span>
+      <p class="text-sm font-semibold text-ink-800">No account required</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ BOARD (OFFERS) ============ -->
+<section id="board" class="max-w-7xl mx-auto px-5 sm:px-8 py-16 md:py-24 border-t-2 border-ink-900">
+  <div class="max-w-2xl mx-auto text-center mb-12">
+    <span class="font-mono text-xs font-semibold tracking-wider uppercase text-stamp-500">Live Board</span>
+    <h2 class="font-display font-extrabold text-ink-900 text-4xl sm:text-5xl mt-2 uppercase tracking-tight">Today's Postings</h2>
+    <p class="text-ink-700 mt-3">Every card below links straight to the source. Tap a listing to read the full details before you claim it.</p>
+  </div>
+
+  <div id="offers-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-7">
+    <!-- Skeleton loaders shown while offers.json is fetched -->
+  </div>
+
+  <div id="offers-empty" class="hidden text-center py-20">
+    <div class="w-14 h-14 mx-auto rounded-full border-2 border-ink-900 bg-paper-50 flex items-center justify-center mb-4">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M9 9h.01M15 9h.01M8 15s1.5 2 4 2 4-2 4-2" stroke="#3A382F" stroke-width="1.8" stroke-linecap="round"/><circle cx="12" cy="12" r="9" stroke="#3A382F" stroke-width="1.8"/></svg>
+    </div>
+    <p class="text-ink-800 font-semibold">The board is empty right now</p>
+    <p class="text-ink-500 text-sm mt-1">Check back shortly — new postings go up regularly.</p>
+  </div>
+</section>
+
+<!-- ============ FAQ ============ -->
+<section id="faq" class="border-t-2 border-ink-900 bg-paper-50">
+  <div class="max-w-3xl mx-auto px-5 sm:px-8 py-16 md:py-20">
+    <h2 class="font-display font-extrabold text-ink-900 text-3xl sm:text-4xl text-center mb-10 uppercase tracking-tight">Questions, Answered</h2>
+    <div class="space-y-3">
+      <details class="group bg-paper-100 border-2 border-ink-900 rounded-sm px-5 py-4">
+        <summary class="flex items-center justify-between cursor-pointer text-ink-900 font-semibold list-none">
+          Does it cost anything to claim a listing?
+          <svg class="shrink-0 transition-transform group-open:rotate-45" width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="#1F5C52" stroke-width="2.2" stroke-linecap="round"/></svg>
+        </summary>
+        <p class="text-ink-700 text-sm mt-3 leading-relaxed">No. Browsing the board and following any listing to its source is free for US visitors.</p>
+      </details>
+      <details class="group bg-paper-100 border-2 border-ink-900 rounded-sm px-5 py-4">
+        <summary class="flex items-center justify-between cursor-pointer text-ink-900 font-semibold list-none">
+          How fresh is the board?
+          <svg class="shrink-0 transition-transform group-open:rotate-45" width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="#1F5C52" stroke-width="2.2" stroke-linecap="round"/></svg>
+        </summary>
+        <p class="text-ink-700 text-sm mt-3 leading-relaxed">Postings are reviewed and refreshed daily so what you see is current.</p>
+      </details>
+      <details class="group bg-paper-100 border-2 border-ink-900 rounded-sm px-5 py-4">
+        <summary class="flex items-center justify-between cursor-pointer text-ink-900 font-semibold list-none">
+          Who's eligible to claim?
+          <svg class="shrink-0 transition-transform group-open:rotate-45" width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="#1F5C52" stroke-width="2.2" stroke-linecap="round"/></svg>
+        </summary>
+        <p class="text-ink-700 text-sm mt-3 leading-relaxed">Most postings are open to US residents 18 and older. Any specific requirements are listed on the card itself.</p>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer class="border-t-2 border-ink-900 bg-paper-200">
+  <div class="max-w-7xl mx-auto px-5 sm:px-8 py-12">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
+      <div>
+        <a href="#top" class="flex items-center gap-2.5 mb-4">
+          <span class="w-8 h-8 rounded-full bg-teal-600 border-2 border-ink-900 flex items-center justify-center">
+            <span class="font-display font-bold text-paper-50 text-base leading-none">B</span>
+          </span>
+          <span class="font-display font-bold text-ink-900 text-lg">BOUNTLY</span>
+        </a>
+        <p class="text-sm text-ink-700 leading-relaxed max-w-xs">A daily board of verified US gift card drops and consumer reward claims.</p>
+      </div>
+
+      <div>
+        <p class="text-sm font-bold font-mono uppercase text-ink-900 mb-4">Quick Links</p>
+        <ul class="space-y-2.5 text-sm text-ink-700">
+          <li><button type="button" data-open-info="privacy" class="hover:text-stamp-500 transition-colors underline decoration-dashed underline-offset-4 text-left">Privacy Policy</button></li>
+          <li><button type="button" data-open-info="terms" class="hover:text-stamp-500 transition-colors underline decoration-dashed underline-offset-4 text-left">Terms &amp; Conditions</button></li>
+          <li><button type="button" data-open-info="contact" class="hover:text-stamp-500 transition-colors underline decoration-dashed underline-offset-4 text-left">Contact Us</button></li>
+        </ul>
+      </div>
+
+      <div>
+        <p class="text-sm font-bold font-mono uppercase text-ink-900 mb-4">Disclosure</p>
+        <p class="text-xs text-ink-600 leading-relaxed">This board may contain affiliate and CPA offer links. Bountly is not the direct provider of any listed reward and may be compensated when you engage with a listed offer. Every posting is independently reviewed before it goes up.</p>
+      </div>
+    </div>
+
+    <div class="border-t border-ink-900/20 mt-10 pt-6 flex flex-col sm:flex-row items-center justify-between gap-3">
+      <p class="text-xs text-ink-500 font-mono">© <span id="year"></span> BOUNTLY. All rights reserved.</p>
+      <p class="text-xs text-ink-500 font-mono">Built for US-based reward claims.</p>
+    </div>
+  </div>
+</footer>
+
+<!-- ============ OFFER DETAIL MODAL ============ -->
+<div id="offer-modal" class="app-modal fixed inset-0 z-[100]" role="dialog" aria-modal="true" aria-labelledby="modal-title-text">
+  <div class="modal-backdrop-el absolute inset-0 bg-ink-900/70 backdrop-blur-sm"></div>
+
+  <div class="relative h-full w-full flex items-center justify-center p-3 sm:p-6 md:p-10">
+    <div class="modal-panel-el w-full max-w-3xl h-full sm:h-auto sm:max-h-[88vh] bg-paper-50 border-2 border-ink-900 rounded-sm shadow-2xl flex flex-col overflow-hidden">
+
+      <div class="sticky top-0 z-10 flex items-start justify-between gap-4 px-5 sm:px-7 py-4 sm:py-5 border-b-2 border-ink-900 bg-paper-50">
+        <div class="flex-1 min-w-0">
+          <span id="modal-category" class="inline-block font-mono text-[11px] font-bold uppercase tracking-wide text-teal-600 border border-teal-600/40 bg-teal-600/10 rounded-sm px-3 py-1 mb-2"></span>
+          <h2 id="modal-title-text" class="font-display font-bold text-ink-900 text-lg sm:text-2xl leading-snug uppercase"></h2>
+        </div>
+        <button id="modal-close" type="button" aria-label="Close" class="shrink-0 w-10 h-10 rounded-sm border-2 border-ink-900 bg-paper-100 flex items-center justify-center text-ink-900 hover:bg-ink-900 hover:text-paper-50 transition-colors">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        </button>
+      </div>
+
+      <div id="modal-scroll" class="flex-1 overflow-y-auto overscroll-contain">
+        <div class="relative w-full aspect-[16/9] sm:aspect-[21/9] overflow-hidden bg-paper-200 border-b-2 border-ink-900">
+          <img id="modal-image" src="" alt="" class="w-full h-full object-cover">
+        </div>
+
+        <div class="px-5 sm:px-8 py-6 sm:py-8">
+          <div class="flex items-center justify-between font-mono text-xs text-ink-500 pb-5 mb-1 border-b border-ink-900/15">
+            <span id="modal-signature" class="inline-flex items-center gap-1.5 font-semibold text-ink-700"></span>
+            <span id="modal-date"></span>
+          </div>
+
+          <div id="modal-body" class="mt-5 text-ink-700 text-[15px] leading-relaxed"></div>
+        </div>
+      </div>
+
+      <div class="px-5 sm:px-8 py-4 sm:py-5 border-t-2 border-ink-900 bg-paper-50">
+        <a id="modal-apply" href="#" target="_blank" rel="noopener noreferrer sponsored"
+          class="btn-stamp min-h-[44px] w-full inline-flex items-center justify-center gap-2 bg-stamp-500 border-2 border-ink-900 text-paper-50 font-mono font-bold uppercase text-sm px-5 py-3.5 rounded-sm">
+         See Full Offer →
+        </a>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ============ INFO MODAL (Privacy / Terms / Contact — kept in-page, no new URLs) ============ -->
+<div id="info-modal" class="app-modal fixed inset-0 z-[100]" role="dialog" aria-modal="true" aria-labelledby="info-title-text">
+  <div class="modal-backdrop-el absolute inset-0 bg-ink-900/70 backdrop-blur-sm"></div>
+
+  <div class="relative h-full w-full flex items-center justify-center p-3 sm:p-6 md:p-10">
+    <div class="modal-panel-el w-full max-w-2xl h-full sm:h-auto sm:max-h-[85vh] bg-paper-50 border-2 border-ink-900 rounded-sm shadow-2xl flex flex-col overflow-hidden">
+
+      <div class="sticky top-0 z-10 flex items-start justify-between gap-4 px-5 sm:px-7 py-4 sm:py-5 border-b-2 border-ink-900 bg-paper-50">
+        <h2 id="info-title-text" class="font-display font-bold text-ink-900 text-xl sm:text-2xl uppercase"></h2>
+        <button id="info-close" type="button" aria-label="Close" class="shrink-0 w-10 h-10 rounded-sm border-2 border-ink-900 bg-paper-100 flex items-center justify-center text-ink-900 hover:bg-ink-900 hover:text-paper-50 transition-colors">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        </button>
+      </div>
+
+      <div class="flex-1 overflow-y-auto overscroll-contain px-5 sm:px-8 py-6 sm:py-8">
+        <div id="info-body" class="prose-body text-ink-700 text-[15px] leading-relaxed"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Hidden templates for the info modal content — edit copy or the mailto address here -->
+<template id="tpl-privacy">
+  <p>Bountly ("we", "us") publishes a daily board of third-party gift card and reward listings for US visitors. This notice explains what we collect and why.</p>
+  <h4>What we collect</h4>
+  <ul>
+    <li>Basic usage data (pages viewed, general region, device type) to keep the board running smoothly.</li>
+    <li>Nothing you type into an outside listing's own form — that information goes directly to the listing's provider, not to us.</li>
+  </ul>
+  <h4>How it's used</h4>
+  <p>Solely to operate and improve this board, and to understand which postings are useful to visitors. We do not sell personal data.</p>
+  <h4>Your choices</h4>
+  <p>You can browse the board without providing any personal information. Questions about this notice can be sent to the address on our Contact page.</p>
+  <p class="text-ink-500 text-sm font-mono">[Placeholder policy — replace with your finalized privacy policy text.]</p>
+</template>
+
+<template id="tpl-terms">
+  <p>By using Bountly, you agree to browse the board responsibly and understand the following:</p>
+  <h4>Third-party listings</h4>
+  <ul>
+    <li>Each posting links to an outside provider. Completing a listing means agreeing to that provider's own terms — Bountly is not a party to that agreement.</li>
+    <li>We review listings before publishing but cannot guarantee outcomes on a third-party site.</li>
+  </ul>
+  <h4>Eligibility</h4>
+  <p>Postings are generally intended for US residents aged 18 and older, unless a listing states otherwise.</p>
+  <h4>Changes</h4>
+  <p>We may update these terms or the board's content at any time without prior notice.</p>
+  <p class="text-ink-500 text-sm font-mono">[Placeholder terms — replace with your finalized terms and conditions text.]</p>
+</template>
+
+<template id="tpl-contact">
+  <p>Have a question about a listing, or something to flag? Reach us by email:</p>
+  <p><a class="gmail-link font-mono font-semibold" href="mailto:contact@bountly.com">contact@bountly.com</a></p>
+  <p class="text-ink-500 text-sm font-mono">[Placeholder address — replace with your live inbox before launch.]</p>
+</template>
+
+<script>
+(function () {
+  // ---------- Footer year ----------
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  // ---------- Header scroll state ----------
+  const header = document.getElementById('site-header');
+  const onScroll = () => {
+    if (window.scrollY > 12) header.classList.add('scrolled');
+    else header.classList.remove('scrolled');
+  };
+  onScroll();
+  window.addEventListener('scroll', onScroll, { passive: true });
+
+  // ---------- Mobile menu ----------
+  const menuToggle = document.getElementById('menu-toggle');
+  const mobileMenu = document.getElementById('mobile-menu');
+  const iconOpen = document.getElementById('icon-open');
+  const iconClose = document.getElementById('icon-close');
+
+  menuToggle.addEventListener('click', () => {
+    const isOpen = mobileMenu.classList.toggle('open');
+    menuToggle.setAttribute('aria-expanded', String(isOpen));
+    iconOpen.classList.toggle('hidden', isOpen);
+    iconClose.classList.toggle('hidden', !isOpen);
+  });
+
+  mobileMenu.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', () => {
+      mobileMenu.classList.remove('open');
+      menuToggle.setAttribute('aria-expanded', 'false');
+      iconOpen.classList.remove('hidden');
+      iconClose.classList.add('hidden');
+    });
+  });
+
+  // ---------- Card entrance animation ----------
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('in-view');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12 });
+
+  // ---------- Escape HTML helper ----------
+  function escapeHTML(str) {
+    if (str === undefined || str === null) return '';
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;');
+  }
+
+  // ---------- Date formatter ----------
+  function formatDate(dateStr) {
+    const d = new Date(dateStr + 'T00:00:00');
+    if (isNaN(d.getTime())) return escapeHTML(dateStr || '');
+    return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+  }
+
+  // ---------- Description normalizer ----------
+  // Supports offers.json "description" as either:
+  //   a) an array of paragraph strings: ["para 1", "para 2", "para 3"]
+  //   b) a plain string with blank-line-separated paragraphs
+  //   c) a single plain string (treated as one paragraph)
+  // Card previews and the modal both read from this same normalized list,
+  // so any number of paragraphs (1 or many) works with zero code changes.
+  function normalizeParagraphs(desc) {
+    if (Array.isArray(desc)) {
+      return desc.map(p => String(p).trim()).filter(Boolean);
+    }
+    if (typeof desc === 'string' && desc.trim()) {
+      const parts = desc.split(/\n\s*\n/).map(p => p.trim()).filter(Boolean);
+      return parts.length ? parts : [desc.trim()];
+    }
+    return [];
+  }
+
+  // ---------- Skeleton cards ----------
+  function renderSkeletons(grid, count) {
+    grid.innerHTML = '';
+    for (let i = 0; i < count; i++) {
+      const el = document.createElement('div');
+      el.className = 'rounded-sm border-2 border-ink-900/20 bg-paper-50 overflow-hidden';
+      el.innerHTML = `
+        <div class="skeleton h-44 w-full"></div>
+        <div class="p-5 space-y-3">
+          <div class="skeleton h-4 w-3/4 rounded"></div>
+          <div class="skeleton h-4 w-1/2 rounded"></div>
+          <div class="skeleton h-3 w-full rounded"></div>
+          <div class="skeleton h-3 w-5/6 rounded"></div>
+          <div class="skeleton h-10 w-full rounded-sm mt-4"></div>
+        </div>`;
+      grid.appendChild(el);
+    }
+  }
+
+  // ---------- Card renderer (ticket-stub design) ----------
+  function createCard(offer) {
+    const card = document.createElement('article');
+    card.className = 'ticket group rounded-sm overflow-hidden flex flex-col';
+
+    const title = escapeHTML(offer.title || 'Untitled Listing');
+    const paragraphs = normalizeParagraphs(offer.description);
+    const previewText = escapeHTML(paragraphs.join(' '));
+    const category = escapeHTML(offer.category || 'Listing');
+    const signature = escapeHTML(offer.signature || 'Verified Source');
+    const image = escapeHTML(offer.image || '');
+    const link = escapeHTML(offer.link || '#');
+    const dateLabel = formatDate(offer.date);
+
+    card.innerHTML = `
+      <div class="relative w-full aspect-[16/10] overflow-hidden bg-paper-200">
+        <img
+          src="${image}"
+          alt="${title}"
+          loading="lazy"
+          class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+          onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1497215728101-856f4ea42174?w=800&q=80';"
+        >
+        <span class="absolute top-3 left-3 font-mono text-[10px] font-bold uppercase tracking-wide text-paper-50 bg-ink-900/85 rounded-sm px-2.5 py-1">
+          ${category}
+        </span>
+      </div>
+
+      <div class="px-5 pt-4">
+        <h3 class="font-display font-bold text-ink-900 text-xl leading-tight clamp-2 min-h-[2.9rem] uppercase">${title}</h3>
+
+        <div class="desc-trigger overflow-hidden mt-2" role="button" tabindex="0" aria-label="Read full description">
+          <p class="text-sm text-ink-600 leading-relaxed clamp-3">${previewText}</p>
+          <span class="see-more-tag inline-block text-xs font-mono font-semibold text-teal-600 mt-1.5">
+            Read full posting →
+          </span>
+        </div>
+      </div>
+
+      <div class="perforation mx-5 my-4"></div>
+
+      <div class="px-5 pb-5 flex flex-col flex-1">
+        <div class="flex items-center justify-between font-mono text-[11px] text-ink-500 mb-4">
+          <span class="inline-flex items-center gap-1.5 font-semibold text-ink-700">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M7 12l3.2 3.2L17 8.4" stroke="#1F5C52" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            ${signature}
+          </span>
+          <span>${dateLabel}</span>
+        </div>
+
+        <a
+          href="${link}"
+          target="_blank"
+          rel="noopener noreferrer sponsored"
+          class="btn-stamp mt-auto min-h-[44px] w-full inline-flex items-center justify-center gap-2 bg-ink-900 hover:bg-stamp-500 text-paper-50 font-mono font-bold uppercase text-sm px-5 py-3 rounded-sm"
+        >
+          View Listing →
+        </a>
+      </div>
+    `;
+
+    const descTrigger = card.querySelector('.desc-trigger');
+    const openHandler = () => {
+      const modalParagraphs = paragraphs.length ? paragraphs : ['No additional details were provided for this listing.'];
+      openOfferModal(offer, modalParagraphs);
+    };
+    descTrigger.addEventListener('click', openHandler);
+    descTrigger.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        openHandler();
+      }
+    });
+
+    return card;
+  }
+
+  // ---------- Load offers ----------
+  async function loadOffers() {
+    const grid = document.getElementById('offers-grid');
+    const emptyState = document.getElementById('offers-empty');
+    renderSkeletons(grid, 6);
+
+    try {
+      const res = await fetch('./offers.json', { cache: 'no-store' });
+      if (!res.ok) throw new Error('Network response was not ok');
+      const data = await res.json();
+
+      if (!Array.isArray(data) || data.length === 0) {
+        grid.innerHTML = '';
+        emptyState.classList.remove('hidden');
+        return;
+      }
+
+      grid.innerHTML = '';
+      emptyState.classList.add('hidden');
+
+      data.forEach(offer => {
+        const card = createCard(offer);
+        grid.appendChild(card);
+        observer.observe(card);
+      });
+    } catch (err) {
+      console.error('Failed to load offers.json:', err);
+      grid.innerHTML = '';
+      emptyState.classList.remove('hidden');
+    }
+  }
+
+  // ---------- Offer detail modal ----------
+  const offerModalEl = document.getElementById('offer-modal');
+  const modalCloseBtn = document.getElementById('modal-close');
+  const modalTitleEl = document.getElementById('modal-title-text');
+  const modalCategoryEl = document.getElementById('modal-category');
+  const modalImageEl = document.getElementById('modal-image');
+  const modalSignatureEl = document.getElementById('modal-signature');
+  const modalDateEl = document.getElementById('modal-date');
+  const modalBodyEl = document.getElementById('modal-body');
+  const modalApplyEl = document.getElementById('modal-apply');
+  const modalScrollEl = document.getElementById('modal-scroll');
+
+  let lastFocusedElement = null;
+
+  function openOfferModal(offer, paragraphs) {
+    lastFocusedElement = document.activeElement;
+
+    modalTitleEl.textContent = offer.title || 'Untitled Listing';
+    modalCategoryEl.textContent = offer.category || 'Listing';
+
+    modalImageEl.src = offer.image || '';
+    modalImageEl.alt = offer.title || '';
+    modalImageEl.onerror = function () {
+      this.onerror = null;
+      this.src = 'https://images.unsplash.com/photo-1497215728101-856f4ea42174?w=1200&q=80';
+    };
+
+    modalSignatureEl.innerHTML = `
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M7 12l3.2 3.2L17 8.4" stroke="#1F5C52" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span>${escapeHTML(offer.signature || 'Verified Source')}</span>
+    `;
+    modalDateEl.textContent = formatDate(offer.date);
+
+    modalBodyEl.innerHTML = paragraphs.map(p => `<p>${escapeHTML(p)}</p>`).join('');
+    modalApplyEl.href = offer.link || '#';
+
+    modalScrollEl.scrollTop = 0;
+    openModal(offerModalEl);
+    modalCloseBtn.focus();
+  }
+
+  function closeOfferModal() { closeModal(offerModalEl); }
+  modalCloseBtn.addEventListener('click', closeOfferModal);
+  offerModalEl.querySelector('.modal-backdrop-el').addEventListener('click', closeOfferModal);
+
+  // ---------- Info modal (Privacy / Terms / Contact) — in-page, no page navigation/new URLs ----------
+  const infoModalEl = document.getElementById('info-modal');
+  const infoCloseBtn = document.getElementById('info-close');
+  const infoTitleEl = document.getElementById('info-title-text');
+  const infoBodyEl = document.getElementById('info-body');
+
+  const INFO_CONTENT = {
+    privacy: { title: 'Privacy Policy', templateId: 'tpl-privacy' },
+    terms: { title: 'Terms & Conditions', templateId: 'tpl-terms' },
+    contact: { title: 'Contact Us', templateId: 'tpl-contact' }
+  };
+
+  function openInfoModal(key) {
+    const entry = INFO_CONTENT[key];
+    if (!entry) return;
+    lastFocusedElement = document.activeElement;
+    infoTitleEl.textContent = entry.title;
+    const tpl = document.getElementById(entry.templateId);
+    infoBodyEl.innerHTML = '';
+    infoBodyEl.appendChild(tpl.content.cloneNode(true));
+    openModal(infoModalEl);
+    infoCloseBtn.focus();
+  }
+
+  function closeInfoModal() { closeModal(infoModalEl); }
+  infoCloseBtn.addEventListener('click', closeInfoModal);
+  infoModalEl.querySelector('.modal-backdrop-el').addEventListener('click', closeInfoModal);
+
+  document.querySelectorAll('[data-open-info]').forEach(btn => {
+    btn.addEventListener('click', () => openInfoModal(btn.getAttribute('data-open-info')));
+  });
+
+  // ---------- Shared modal open/close plumbing ----------
+  let activeModal = null;
+
+  function openModal(modalEl) {
+    activeModal = modalEl;
+    modalEl.classList.add('open');
+    document.body.classList.add('modal-locked');
+    document.addEventListener('keydown', onAnyModalKeydown);
+  }
+
+  function closeModal(modalEl) {
+    modalEl.classList.remove('open');
+    if (activeModal === modalEl) activeModal = null;
+    if (!document.querySelector('.app-modal.open')) {
+      document.body.classList.remove('modal-locked');
+      document.removeEventListener('keydown', onAnyModalKeydown);
+    }
+    if (lastFocusedElement && typeof lastFocusedElement.focus === 'function') {
+      lastFocusedElement.focus();
+    }
+  }
+
+  function onAnyModalKeydown(e) {
+    if (e.key === 'Escape' && activeModal) closeModal(activeModal);
+  }
+
+  loadOffers();
+})();
+</script>
+</body>
+</html>
